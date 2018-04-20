@@ -1,0 +1,12 @@
+name: EVincentive
+title: EVincentive
+username:
+account: energychoice
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 326988
+bundleId: 1329869
+url: https://energychoice.shinyapps.io/EVincentive/
+when: 1524246398.49641
+asMultiple: FALSE
+asStatic: FALSE
