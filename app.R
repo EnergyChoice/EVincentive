@@ -4,6 +4,7 @@ library(readr)
 library(shinydashboard)
 library(reshape2)
 library(ggplot2)
+library(bsplus)
 
 # seperate normal distribution
 # calculate the environmental benefits, health benenfits. 
@@ -50,18 +51,41 @@ ui <-  dashboardPage(
               sidebarLayout(  
                 sidebarPanel(
                   selectInput(inputId="Agency", "Agency (region)",
-                              choices = list("Apple Valley" = "Apple Valley", "San Francisco" = "San Francisco", "Lancaster" = "Lancaster", "MCE" ="MCE", "Peninsula"="Peninsula", "Redwood Coast"="Redwood Coast", "Silicon Valley"="Silicon Valley", "Sonoma"="Sonoma"), selected = "Sonoma"),
+                              choices = list("Apple Valley" = "Apple Valley", "San Francisco" = "San Francisco", "Lancaster" = "Lancaster", "MCE" ="MCE", "Peninsula"="Peninsula", "Redwood Coast"="Redwood Coast", "Silicon Valley"="Silicon Valley", "Sonoma"="Sonoma"), selected = "Sonoma")%>%
+                    shinyInput_label_embed(
+                      shiny_iconlink() %>%
+                        bs_embed_tooltip(
+                          title = "Which CCE Agency will be running the program. The model uses this information to set the correct population level and predict local emissions impacts.
+", placement = "right")),
                   numericInput(inputId ="Budget", "Total Incentive Budget ($)", 
-                               value = 1500000),
+                               value = 1500000) %>%
+                                 shinyInput_label_embed(
+                                   shiny_iconlink() %>%
+                                     bs_embed_tooltip(
+                                       title = "The total available budget for providing EV and PHEV incentives.", placement = "right")),
                   selectInput(inputId="Year","Year from 2016 to 2030",
-                              choices = list(2016,2017,2018,2019,2020,2021,2022,2023, 2024,2025,2026,2027,2028,2029,2030), selected = 2017),
-                  numericInput(inputId ="EV_rebate","Electric Vehicle (BEV) Incentive", 
-                               value = 2000),
-                  numericInput(inputId ="PHEV_rebate", "Electric Vehicle (PHEV) Incentive",  value = 1000),
+                              choices = list(2016,2017,2018,2019,2020,2021,2022,2023, 2024,2025,2026,2027,2028,2029,2030), selected = 2017) %>%
+                    shinyInput_label_embed(
+                      shiny_iconlink() %>%
+                        bs_embed_tooltip(
+                          title = "The year that the incentives program will run.", placement = "right")),
+                  numericInput(inputId ="EV_rebate","Electric Vehicle (BEV) Incentive", value = 2000) %>%
+                    shinyInput_label_embed(
+                      shiny_iconlink() %>%
+                        bs_embed_tooltip(
+                          title = "The dollar amount that the agency will offer for each electric vehicle purchase.", placement = "right")),
+                  numericInput(inputId ="PHEV_rebate", "Electric Vehicle (PHEV) Incentive",  value = 1000) %>%
+                    shinyInput_label_embed(
+                      shiny_iconlink() %>%
+                        bs_embed_tooltip(
+                          title = "The dollar amount that the agency will offer for each plug-in hybrid purchase.", placement = "right")),
                   numericInput(inputId ="Energymix1", "Energy Mix - Coal (%)", 
-                               value = 0),
-                  numericInput(inputId ="Energymix2", "Energy Mix - Natural Gas (%)", 
-                               value = 0),
+                               value = 0) %>%
+                    shinyInput_label_embed(
+                      shiny_iconlink() %>%
+                        bs_embed_tooltip(
+                          title = "These values specify the composition of the energy mix that is used to charge electric vehicles.", placement = "right")),
+                  numericInput(inputId ="Energymix2", "Energy Mix - Natural Gas (%)", value = 0),
                   numericInput(inputId ="Energymix3","Energy Mix - Geothermal (%)", 
                                value = 8),
                   numericInput(inputId ="Energymix4","Energy Mix - Petroleum (%)", 
@@ -78,35 +102,113 @@ ui <-  dashboardPage(
                                value = 0),
                   numericInput(inputId ="Energymix10", "Energy Mix - Other (%)", 
                                value = 10), 
-                  selectInput(inputId ="Lux_BEV", "Include incentive for High-end BEV (e.g. Tesla)", choices = list("Yes"=1, "No"=2), selected = 2),
-                  selectInput(inputId ="Lux_PHEV", "Include incentive for Luxury PHEV (e.g. Audi A3 e-tron)", choices = list("Yes"=1, "No"=2), selected = 2),
-                  selectInput(inputId ="Fed", "Federal Tax Credit Availability", choices = list("Yes"=1, "No"=2), selected = 1),
-                  selectInput(inputId ="CVRP", "Clean Vehicle Rebate Project (CVRP) Availability", choices = list("Yes"=1, "No"=2), selected = 1),
+                  selectInput(inputId ="Lux_BEV", "Include incentive for High-end BEV (e.g. Tesla)", choices = list("Yes"=1, "No"=2), selected = 2) %>%
+                    shinyInput_label_embed(
+                      shiny_iconlink() %>%
+                        bs_embed_tooltip(
+                          title = "These are Yes/No inputs set at No by default. If switched to Yes, the model will include Tesla vehicles among those that receive their respective incentives.", placement = "right")),
+                  selectInput(inputId ="Lux_PHEV", "Include incentive for Luxury PHEV (e.g. Audi A3 e-tron)", choices = list("Yes"=1, "No"=2), selected = 2) %>%
+                    shinyInput_label_embed(
+                      shiny_iconlink() %>%
+                        bs_embed_tooltip(
+                          title = "These are Yes/No inputs set at No by default. If switched to Yes, the model will include luxury plug-in hybrid vehicles among those that receive their respective incentives.", placement = "right")),
+                  selectInput(inputId ="Fed", "Federal Tax Credit Availability", choices = list("Yes"=1, "No"=2), selected = 1) %>%
+                    shinyInput_label_embed(
+                      shiny_iconlink() %>%
+                        bs_embed_tooltip(
+                          title = "These are Yes/No inputs set at Yes by default. If switched to No the model will remove that credit or rebate from its calculations of vehicle cost.", placement = "right")),
+                  selectInput(inputId ="CVRP", "Clean Vehicle Rebate Project (CVRP) Availability", choices = list("Yes"=1, "No"=2), selected = 1) %>%
+                    shinyInput_label_embed(
+                      shiny_iconlink() %>%
+                        bs_embed_tooltip(
+                          title = "These are Yes/No inputs set at Yes by default. If switched to No the model will remove that credit or rebate from its calculations of vehicle cost.", placement = "right")),
                   numericInput(inputId ="Discount_EV","Additional discount BEV (e.g. dealer discount)", 
-                               value = 0),
+                               value = 0) %>%
+                    shinyInput_label_embed(
+                      shiny_iconlink() %>%
+                        bs_embed_tooltip(
+                          title = "These inputs give the user the option to add additional discounts on the cost of BEVs. These are not included in the agencies overall program costs and may represent discounts offered by vehicle dealers or manufacturers. They benefit the customer but are not costs incurred by the agency", placement = "right")),
                   numericInput(inputId ="Discount_PHEV", "Additional discount PHEV (e.g. dealer discount)",
-                               value = 0), 
+                               value = 0) %>%
+                    shinyInput_label_embed(
+                      shiny_iconlink() %>%
+                        bs_embed_tooltip(
+                          title = "These inputs give the user the option to add additional discounts on the cost of PHEVs. These are not included in the agencies overall program costs and may represent discounts offered by vehicle dealers or manufacturers. They benefit the customer but are not costs incurred by the agency", placement = "right")), 
                   numericInput(inputId ="Length", "Program Length (month)", 
-                               value = 4),
+                               value = 4) %>%
+                    shinyInput_label_embed(
+                      shiny_iconlink() %>%
+                        bs_embed_tooltip(
+                          title = "The number of months that the incentive program will run, with the default set at 12.", placement = "right")),
                   numericInput(inputId ="Staff", "Number of staff reqired", 
-                               value = 5),
+                               value = 5) %>%
+                    shinyInput_label_embed(
+                      shiny_iconlink() %>%
+                        bs_embed_tooltip(
+                          title = "The number of full-time employees needed to run the program.", placement = "right")),
                   numericInput(inputId ="Admincost", "Administrative Cost ($/person/year)", 
-                               value = 124000),
+                               value = 124000) %>%
+                    shinyInput_label_embed(
+                      shiny_iconlink() %>%
+                        bs_embed_tooltip(
+                          title = "The salary and administrative costs per full time employee working on the program.", placement = "right")),
                   numericInput(inputId ="Impcost", "Additional Implementation Costs ($)", 
-                               value = 80000),
+                               value = 80000) %>%
+                    shinyInput_label_embed(
+                      shiny_iconlink() %>%
+                        bs_embed_tooltip(
+                          title = "Any additional costs to run the program that the user anticipates. Defaults have been set based on the costs to run Sonoma Clean Power's pilot EV program.", placement = "right")),
                   sliderInput(inputId ="Profit", "Profit portion (%)",
-                              min = 0, max = 100, value = 10),
+                              min = 0, max = 100, value = 10)%>%
+                    shinyInput_label_embed(
+                      shiny_iconlink() %>%
+                        bs_embed_tooltip(
+                          title = "This input allows the user to set the portion of electricity sales that goes to revenues with a default set at 10%.", placement = "right")),
                   sliderInput(inputId ="Marketing", "Marketing Effectiveness (%)",
-                              min = 0, max = 100, value = 50),
+                              min = 0, max = 100, value = 50)%>%
+                    shinyInput_label_embed(
+                      shiny_iconlink() %>%
+                        bs_embed_tooltip(
+                          title = "This input represents a way to account for the role of marketing on influencing program effectiveness. The user may input the percentage of  eligible customers they expect will be aware of the program being offered. This percentage directly modifies the predicted number of rebates redeemed. Because this only modifies the number of people aware of available discounts, it does not take into account marketing that changes the likelihood of customers taking advantage of the discounts. (i.e. marketing that is more or less persuasive)", placement = "right")),
                   numericInput(inputId ="Gas", "California Average Gasoline Price ($/gallon)", 
-                               value = 2.78),
+                               value = 2.78)%>%
+                    shinyInput_label_embed(
+                      shiny_iconlink() %>%
+                        bs_embed_tooltip(
+                          title = "These values are set at the 2016 California average by default and can be modified to alter overall vehicle costs.", placement = "right")),
                   numericInput(inputId ="Elec", "California Average Electricity Rate ($/kwh)", 
-                               value = 0.19),
-                  numericInput(inputId ="Rebound", "Rebound Effect (%)", value = 3),
-                  numericInput(inputId ="Trans", "Transmission Losses (%)", value = 5),
-                  numericInput(inputId ="Discount", "Discount rate (%)", value = 5),
-                  numericInput(inputId ="carbon_p", "Carbon Value (dollar per ton CO2e)", value = 13),    
-                  selectInput(inputId="Impact", "Value of Health Impact Estimates", choices = list("Low","Mid","High"), selected = "High")), 
+                               value = 0.19)%>%
+                    shinyInput_label_embed(
+                      shiny_iconlink() %>%
+                        bs_embed_tooltip(
+                          title = "These values are set at the 2016 California average by default and can be modified to alter overall vehicle costs.", placement = "right")),
+                  numericInput(inputId ="Rebound", "Rebound Effect (%)", value = 3)
+                  %>%
+                    shinyInput_label_embed(
+                      shiny_iconlink() %>%
+                        bs_embed_tooltip(
+                          title = "This input accounts for the tendency for individuals to increase the amount that they drive once they switch to an electric vehicle from a conventional one. The default value is set at 3%, representing a 3% increase in annual miles driven for new BEV and PHEV drivers.", placement = "right")),
+                  numericInput(inputId ="Trans", "Transmission Losses (%)", value = 5)%>%
+                    shinyInput_label_embed(
+                      shiny_iconlink() %>%
+                        bs_embed_tooltip(
+                          title = "This input accounts for electricity losses during transmission from the electricity source to the vehicle. The default value is set at 5%, representing the US average transmission losses, according to the EIA.", placement = "right")),
+                  numericInput(inputId ="Discount", "Discount rate (%)", value = 5)
+                  %>%
+                    shinyInput_label_embed(
+                      shiny_iconlink() %>%
+                        bs_embed_tooltip(
+                          title = "The annual rate at which future costs and benefits are devalued. The default value is set at 5%.", placement = "right")),
+                  numericInput(inputId ="carbon_p", "Carbon Value (dollar per ton CO2e)", value = 13) %>%
+                    shinyInput_label_embed(
+                      shiny_iconlink() %>%
+                        bs_embed_tooltip(
+                          title = "The monetary value given to an avoided ton of CO2e emissions. The default value is set at $13/ton, based on the 2016 California market trading rate for CO2.", placement = "right")),    
+                  selectInput(inputId="Impact", "Value of Health Impact Estimates", choices = list("Low","Mid","High"), selected = "High")%>%
+                  shinyInput_label_embed(
+                    shiny_iconlink() %>%
+                      bs_embed_tooltip(
+                        title = "The monetary value given to an avoided tailpipe emissions. The level can be chosen depending on population density.", placement = "right"))), 
                 mainPanel(fluidRow(actionButton("go", "Calculate"),br(),br(),
                                    column(12, box(h4("The Estimated Number of Sales"), tableOutput("table1"), height = 150, width = 350)),
                                    column(12, box(plotOutput("plot1"), height = 420, width = 350)),
