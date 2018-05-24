@@ -16,10 +16,11 @@ ui <-  dashboardPage(
   dashboardHeader(title="EV Incentive Program Toolkit"),
   dashboardSidebar(
     sidebarMenu(
-      
+
       menuItem("Model Overview", tabName = "tab_1"),
       menuItem("User Guide", tabName = "tab_2"), 
-      menuItem("Toolkit", tabName = "tab_3")
+      menuItem("[Step1] Toolkit-Inputs", tabName = "tab_3"),
+      menuItem("[Step2] Toolkit-Results", tabName = "tab_4")
       
     )), 
   dashboardBody(tabItems(
@@ -47,9 +48,10 @@ ui <-  dashboardPage(
                       ))), 
     tabItem(tabName ="tab_3",
             fluidPage(
-              titlePanel("To get results, click Calculate button and wait"),
-              sidebarLayout(  
-                sidebarPanel(
+              titlePanel("Insert all inputs first and go to the next tab to get results"),
+               fluidRow(  
+                 
+                 column(3,box(title = "Agency main inputs", width=NULL, status = "success", solidHeader = TRUE, collapsible = TRUE,
                   selectInput(inputId="Agency", "Agency (region)",
                               choices = list("Apple Valley" = "Apple Valley", "San Francisco" = "San Francisco", "Lancaster" = "Lancaster", "MCE" ="MCE", "Peninsula"="Peninsula", "Redwood Coast"="Redwood Coast", "Silicon Valley"="Silicon Valley", "Sonoma"="Sonoma"), selected = "Sonoma")%>%
                     shinyInput_label_embed(
@@ -78,13 +80,59 @@ ui <-  dashboardPage(
                     shinyInput_label_embed(
                       shiny_iconlink() %>%
                         bs_embed_tooltip(
-                          title = "The dollar amount that the agency will offer for each plug-in hybrid purchase.", placement = "right")),
-                  numericInput(inputId ="Energymix1", "Energy Mix - Coal (%)", 
-                               value = 0) %>%
+                          title = "The dollar amount that the agency will offer for each plug-in hybrid purchase.", placement = "right"))),
+                  
+                  box(title = "Program detail inputs", width=NULL, status = "success", solidHeader = TRUE, collapsible = TRUE,
+                               numericInput(inputId ="Length", "Program Length (month)", 
+                                            value = 4) %>%
+                                 shinyInput_label_embed(
+                                   shiny_iconlink() %>%
+                                     bs_embed_tooltip(
+                                       title = "The number of months that the incentive program will run, with the default set at 12.", placement = "right")),
+                               numericInput(inputId ="Staff", "Number of staff reqired", 
+                                            value = 5) %>%
+                                 shinyInput_label_embed(
+                                   shiny_iconlink() %>%
+                                     bs_embed_tooltip(
+                                       title = "The number of full-time employees needed to run the program.", placement = "right")),
+                               numericInput(inputId ="Admincost", "Administrative Cost ($/person/year)", 
+                                            value = 124000) %>%
+                                 shinyInput_label_embed(
+                                   shiny_iconlink() %>%
+                                     bs_embed_tooltip(
+                                       title = "The salary and administrative costs per full time employee working on the program.", placement = "right")),
+                               numericInput(inputId ="Impcost", "Additional Implementation Costs ($)", 
+                                            value = 80000) %>%
+                                 shinyInput_label_embed(
+                                   shiny_iconlink() %>%
+                                     bs_embed_tooltip(
+                                       title = "Any additional costs to run the program that the user anticipates. Defaults have been set based on the costs to run Sonoma Clean Power's pilot EV program.", placement = "right")),
+                               sliderInput(inputId ="Profit", "Profit portion (%)",
+                                           min = 0, max = 100, value = 10)%>%
+                                 shinyInput_label_embed(
+                                   shiny_iconlink() %>%
+                                     bs_embed_tooltip(
+                                       title = "This input allows the user to set the portion of electricity sales that goes to revenues with a default set at 10%.", placement = "right")),
+                               sliderInput(inputId ="Marketing", "Marketing Effectiveness (%)",
+                                           min = 0, max = 100, value = 50)%>%
+                                 shinyInput_label_embed(
+                                   shiny_iconlink() %>%
+                                     bs_embed_tooltip(
+                                       title = "This input represents a way to account for the role of marketing on influencing program effectiveness. The user may input the percentage of  eligible customers they expect will be aware of the program being offered. This percentage directly modifies the predicted number of rebates redeemed. Because this only modifies the number of people aware of available discounts, it does not take into account marketing that changes the likelihood of customers taking advantage of the discounts. (i.e. marketing that is more or less persuasive)", placement = "right")))
+                  
+                  
+                  
+                  ),
+                  
+                 
+                 
+                 column(3,box(title = "Energy mix inputs", width=NULL, status = "success", solidHeader = TRUE, collapsible = TRUE, 
+                 numericInput(inputId ="Energymix1", "Energy Mix - Coal (%)", value = 0) %>%
                     shinyInput_label_embed(
                       shiny_iconlink() %>%
                         bs_embed_tooltip(
                           title = "These values specify the composition of the energy mix that is used to charge electric vehicles.", placement = "right")),
+                 
                   numericInput(inputId ="Energymix2", "Energy Mix - Natural Gas (%)", value = 0),
                   numericInput(inputId ="Energymix3","Energy Mix - Geothermal (%)", 
                                value = 8),
@@ -101,7 +149,10 @@ ui <-  dashboardPage(
                   numericInput(inputId ="Energymix9","Energy Mix - Nuclear (%)", 
                                value = 0),
                   numericInput(inputId ="Energymix10", "Energy Mix - Other (%)", 
-                               value = 10), 
+                               value = 10))), 
+                
+                 
+                  column(3,box(title = "Program detail inputs", width=NULL, status = "success", solidHeader = TRUE, collapsible = TRUE,
                   selectInput(inputId ="Lux_BEV", "Include incentive for High-end BEV (e.g. Tesla)", choices = list("Yes"=1, "No"=2), selected = 2) %>%
                     shinyInput_label_embed(
                       shiny_iconlink() %>%
@@ -133,89 +184,69 @@ ui <-  dashboardPage(
                     shinyInput_label_embed(
                       shiny_iconlink() %>%
                         bs_embed_tooltip(
-                          title = "These inputs give the user the option to add additional discounts on the cost of PHEVs. These are not included in the agencies overall program costs and may represent discounts offered by vehicle dealers or manufacturers. They benefit the customer but are not costs incurred by the agency", placement = "right")), 
-                  numericInput(inputId ="Length", "Program Length (month)", 
-                               value = 4) %>%
-                    shinyInput_label_embed(
-                      shiny_iconlink() %>%
-                        bs_embed_tooltip(
-                          title = "The number of months that the incentive program will run, with the default set at 12.", placement = "right")),
-                  numericInput(inputId ="Staff", "Number of staff reqired", 
-                               value = 5) %>%
-                    shinyInput_label_embed(
-                      shiny_iconlink() %>%
-                        bs_embed_tooltip(
-                          title = "The number of full-time employees needed to run the program.", placement = "right")),
-                  numericInput(inputId ="Admincost", "Administrative Cost ($/person/year)", 
-                               value = 124000) %>%
-                    shinyInput_label_embed(
-                      shiny_iconlink() %>%
-                        bs_embed_tooltip(
-                          title = "The salary and administrative costs per full time employee working on the program.", placement = "right")),
-                  numericInput(inputId ="Impcost", "Additional Implementation Costs ($)", 
-                               value = 80000) %>%
-                    shinyInput_label_embed(
-                      shiny_iconlink() %>%
-                        bs_embed_tooltip(
-                          title = "Any additional costs to run the program that the user anticipates. Defaults have been set based on the costs to run Sonoma Clean Power's pilot EV program.", placement = "right")),
-                  sliderInput(inputId ="Profit", "Profit portion (%)",
-                              min = 0, max = 100, value = 10)%>%
-                    shinyInput_label_embed(
-                      shiny_iconlink() %>%
-                        bs_embed_tooltip(
-                          title = "This input allows the user to set the portion of electricity sales that goes to revenues with a default set at 10%.", placement = "right")),
-                  sliderInput(inputId ="Marketing", "Marketing Effectiveness (%)",
-                              min = 0, max = 100, value = 50)%>%
-                    shinyInput_label_embed(
-                      shiny_iconlink() %>%
-                        bs_embed_tooltip(
-                          title = "This input represents a way to account for the role of marketing on influencing program effectiveness. The user may input the percentage of  eligible customers they expect will be aware of the program being offered. This percentage directly modifies the predicted number of rebates redeemed. Because this only modifies the number of people aware of available discounts, it does not take into account marketing that changes the likelihood of customers taking advantage of the discounts. (i.e. marketing that is more or less persuasive)", placement = "right")),
-                  numericInput(inputId ="Gas", "California Average Gasoline Price ($/gallon)", 
+                          title = "These inputs give the user the option to add additional discounts on the cost of PHEVs. These are not included in the agencies overall program costs and may represent discounts offered by vehicle dealers or manufacturers. They benefit the customer but are not costs incurred by the agency", placement = "right")))),
+                 
+                
+                 column(3,box(title = "Other detail inputs", width=NULL, status = "success", solidHeader = TRUE, collapsible = TRUE, 
+                 numericInput(inputId ="Gas", "California Average Gasoline Price ($/gallon)", 
                                value = 2.78)%>%
                     shinyInput_label_embed(
                       shiny_iconlink() %>%
                         bs_embed_tooltip(
-                          title = "These values are set at the 2016 California average by default and can be modified to alter overall vehicle costs.", placement = "right")),
+                          title = "These values are set at the 2016 California average by default and can be modified to alter overall vehicle costs.", placement = "left")),
                   numericInput(inputId ="Elec", "California Average Electricity Rate ($/kwh)", 
                                value = 0.19)%>%
                     shinyInput_label_embed(
                       shiny_iconlink() %>%
                         bs_embed_tooltip(
-                          title = "These values are set at the 2016 California average by default and can be modified to alter overall vehicle costs.", placement = "right")),
+                          title = "These values are set at the 2016 California average by default and can be modified to alter overall vehicle costs.", placement = "left")),
                   numericInput(inputId ="Rebound", "Rebound Effect (%)", value = 3)
                   %>%
                     shinyInput_label_embed(
                       shiny_iconlink() %>%
                         bs_embed_tooltip(
-                          title = "This input accounts for the tendency for individuals to increase the amount that they drive once they switch to an electric vehicle from a conventional one. The default value is set at 3%, representing a 3% increase in annual miles driven for new BEV and PHEV drivers.", placement = "right")),
+                          title = "This input accounts for the tendency for individuals to increase the amount that they drive once they switch to an electric vehicle from a conventional one. The default value is set at 3%, representing a 3% increase in annual miles driven for new BEV and PHEV drivers.", placement = "left")),
                   numericInput(inputId ="Trans", "Transmission Losses (%)", value = 5)%>%
                     shinyInput_label_embed(
                       shiny_iconlink() %>%
                         bs_embed_tooltip(
-                          title = "This input accounts for electricity losses during transmission from the electricity source to the vehicle. The default value is set at 5%, representing the US average transmission losses, according to the EIA.", placement = "right")),
+                          title = "This input accounts for electricity losses during transmission from the electricity source to the vehicle. The default value is set at 5%, representing the US average transmission losses, according to the EIA.", placement = "left")),
                   numericInput(inputId ="Discount", "Discount rate (%)", value = 5)
                   %>%
                     shinyInput_label_embed(
                       shiny_iconlink() %>%
                         bs_embed_tooltip(
-                          title = "The annual rate at which future costs and benefits are devalued. The default value is set at 5%.", placement = "right")),
+                          title = "The annual rate at which future costs and benefits are devalued. The default value is set at 5%.", placement = "left")),
                   numericInput(inputId ="carbon_p", "Carbon Value (dollar per ton CO2e)", value = 13) %>%
                     shinyInput_label_embed(
                       shiny_iconlink() %>%
                         bs_embed_tooltip(
-                          title = "The monetary value given to an avoided ton of CO2e emissions. The default value is set at $13/ton, based on the 2016 California market trading rate for CO2.", placement = "right")),    
+                          title = "The monetary value given to an avoided ton of CO2e emissions. The default value is set at $13/ton, based on the 2016 California market trading rate for CO2.", placement = "left")),    
                   selectInput(inputId="Impact", "Value of Health Impact Estimates", choices = list("Low","Mid","High"), selected = "High")%>%
                   shinyInput_label_embed(
                     shiny_iconlink() %>%
                       bs_embed_tooltip(
-                        title = "The monetary value given to an avoided tailpipe emissions. The level can be chosen depending on population density.", placement = "right"))), 
-                mainPanel(fluidRow(actionButton("go", "Calculate"),br(),br(),
-                                   column(12, box(h4("The Estimated Number of Sales"), tableOutput("table1"), height = 150, width = 350)),
-                                   column(12, box(plotOutput("plot1"), height = 420, width = 350)),
-                                   column(12, box(h4("Total Benefits and Costs"),tableOutput("table2"), height = 370, width = 350)),
-                                   column(12, box(plotOutput("plot2"), height = 420, width = 350)))
-                )))
-    ))))
+                        title = "The monetary value given to an avoided tailpipe emissions. The level can be chosen depending on population density.", placement = "left"))))
+                ))# fluid page
+    ),# Tab_3
+    
+    
+    tabItem(tabName = "tab_4",
+            fluidPage(h3("To see the results, click [Calculate] button here >> ", actionButton("go", "Calculate")),
+                      fluidRow(
+                        column(6, 
+                               box(title = "The Estimated Number of EV and PHEV Uptakes", width=12, status = "primary", solidHeader = TRUE, collapsible = TRUE, tableOutput("table1")),
+                               box(title = "Total Benefits and Costs", width=12, status = "success", solidHeader = TRUE, collapsible = TRUE, tableOutput("table2"))),
+                        column(6,
+                               box(title = "The Estimated Number of EV and PHEV Uptakes", width=12, status = "primary", solidHeader = TRUE, collapsible = TRUE,plotOutput("plot1")))
+                        
+                      )
+                      
+                      ))
+
+    )))
+
+
 server <- function(input, output) {
   
   TCM <- eventReactive(input$go, {
@@ -223,7 +254,7 @@ server <- function(input, output) {
     Market_Share_Simple <- read_csv("Market_Share_Simple.csv")
     Cost_data <- read_csv("Cost.csv") 
     Projection <- read_csv("Price_Projection.csv")
-    N = 1000 # Number of simulation
+    N = 10000 # Number of simulation
     N_car_model = nrow(Data)# count number of car models
     Need_col = N_car_model+1
     ln_Mean_VMT <- 8.87192821723217 # Mean value of Ln(VTM). THis is because the VTM distribution is lognormal distribution 
@@ -560,7 +591,6 @@ server <- function(input, output) {
     library(ggplot2)
     ggplot(DF1, aes(x = Type, y = value, fill = variable)) + 
       geom_bar(stat = "identity")+
-      ggtitle("The Number of EV and PHEV Sales through EV Program")+
       ylab("Number of Sales")+
       xlab("")+
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
