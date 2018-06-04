@@ -53,7 +53,7 @@ ui <-  dashboardPage(
                  
                  column(3,box(title = "Agency main inputs", width=NULL, status = "success", solidHeader = TRUE, collapsible = TRUE,
                   selectInput(inputId="Agency", "Agency (region)",
-                              choices = list("Apple Valley" = "Apple Valley", "San Francisco" = "San Francisco", "Lancaster" = "Lancaster", "MCE" ="MCE", "Peninsula"="Peninsula", "Redwood Coast"="Redwood Coast", "Silicon Valley"="Silicon Valley", "Sonoma"="Sonoma"), selected = "Sonoma")%>%
+                              choices = list("Apple Valley Choice Energy" = "Apple Valley", "Clean Power SF" = "San Francisco", "Lancaster Choice Energy" = "Lancaster", "MCE Clean Energy" ="MCE", "Peninsula Clean Energy"="Peninsula", "Redwood Coast Energy Authority"="Redwood Coast", "Silicon Valley Clean Energy"="Silicon Valley", "Sonoma Clean Power"="Sonoma"), selected = "Sonoma")%>%
                     shinyInput_label_embed(
                       shiny_iconlink() %>%
                         bs_embed_tooltip(
@@ -127,29 +127,26 @@ ui <-  dashboardPage(
                  
                  
                  column(3,box(title = "Energy mix inputs", width=NULL, status = "success", solidHeader = TRUE, collapsible = TRUE, 
-                 numericInput(inputId ="Energymix1", "Energy Mix - Coal (%)", value = 0) %>%
-                    shinyInput_label_embed(
-                      shiny_iconlink() %>%
-                        bs_embed_tooltip(
-                          title = "These values specify the composition of the energy mix that is used to charge electric vehicles.", placement = "right")),
-                 
-                  numericInput(inputId ="Energymix2", "Energy Mix - Natural Gas (%)", value = 0),
-                  numericInput(inputId ="Energymix3","Energy Mix - Geothermal (%)", 
-                               value = 8),
-                  numericInput(inputId ="Energymix4","Energy Mix - Petroleum (%)", 
+                numericInput(inputId ="Energymix6","Energy Mix - Biomass (%)", 
+                                           value = 0)%>%
+                  shinyInput_label_embed(
+                    shiny_iconlink() %>%
+                      bs_embed_tooltip(
+                        title = "These values specify the composition of the energy mix that is used to charge electric vehicles.", placement = "right")),
+                numericInput(inputId ="Energymix7", "Energy Mix - Biogas (%)", 
+                             value = 0),
+                numericInput(inputId ="Energymix3","Energy Mix - Geothermal (%)", 
+                             value = 8),
+                numericInput(inputId ="Energymix8", "Energy Mix - Eligible Renewable (%)",value = 33),
+                numericInput(inputId ="Energymix1", "Energy Mix - Coal (%)", value = 0),
+                numericInput(inputId ="Energymix5","Energy Mix - Large Hydro (%)",
+                              value = 49),
+                numericInput(inputId ="Energymix2", "Energy Mix - Natural Gas (%)", value = 0),
+                numericInput(inputId ="Energymix9","Energy Mix - Nuclear (%)", 
+                              value = 0),
+                numericInput(inputId ="Energymix4","Energy Mix - Petroleum (%)", 
                                value = 0),
-                  numericInput(inputId ="Energymix5","Energy Mix - Large Hydro (%)", 
-                               value = 49),
-                  numericInput(inputId ="Energymix6","Energy Mix - Biomass (%)", 
-                               value = 0),
-                  numericInput(inputId ="Energymix7", "Energy Mix - Biogas (%)", 
-                               value = 0),
-                  numericInput(inputId ="Energymix8", "Energy Mix - Eligible Renewable (%)", 
-                               value = 33),
-                  numericInput(inputId ="Energymix9","Energy Mix - Nuclear (%)", 
-                               value = 0),
-                  numericInput(inputId ="Energymix10", "Energy Mix - Other (%)", 
-                               value = 10))), 
+                numericInput(inputId ="Energymix10", "Energy Mix - Unspecified (%)",  value = 10))), 
                 
                  
                   column(3,box(title = "Program detail inputs", width=NULL, status = "success", solidHeader = TRUE, collapsible = TRUE,
@@ -211,12 +208,12 @@ ui <-  dashboardPage(
                       shiny_iconlink() %>%
                         bs_embed_tooltip(
                           title = "This input accounts for electricity losses during transmission from the electricity source to the vehicle. The default value is set at 5%, representing the US average transmission losses, according to the EIA.", placement = "left")),
-                  numericInput(inputId ="Discount", "Discount rate (%)", value = 5)
+                  numericInput(inputId ="Discount", "Societal goods discount rate (%)", value = 5)
                   %>%
                     shinyInput_label_embed(
                       shiny_iconlink() %>%
                         bs_embed_tooltip(
-                          title = "The annual rate at which future costs and benefits are devalued. The default value is set at 5%.", placement = "left")),
+                          title = "The annual rate at which future costs and benefits are devalued by the society. (Used to calculate heatlh and environmental costs/benefits that impact the society.) The default value is set at 5%.", placement = "left")),
                   numericInput(inputId ="carbon_p", "Carbon Value (dollar per ton CO2e)", value = 13) %>%
                     shinyInput_label_embed(
                       shiny_iconlink() %>%
