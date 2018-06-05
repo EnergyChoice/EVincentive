@@ -13,32 +13,32 @@ library(bsplus)
 
 # Define UI for app that draws a bar graph ----
 ui <-  dashboardPage(
-  dashboardHeader(title="EV Incentive Program Toolkit"),
+  dashboardHeader(title="EV Incentive Program"),
   dashboardSidebar(
     sidebarMenu(
 
-      menuItem("Model Overview", tabName = "tab_1"),
+      menuItem("Tool Overview", tabName = "tab_1"),
       menuItem("User Guide", tabName = "tab_2"), 
-      menuItem("[Step1] Toolkit-Inputs", tabName = "tab_3"),
-      menuItem("[Step2] Toolkit-Results", tabName = "tab_4")
+      menuItem("Inputs", tabName = "tab_3"),
+      menuItem("Results", tabName = "tab_4")
       
     )), 
   dashboardBody(tabItems(
     tabItem(tabName = "tab_1",
-            fluidPage(h3("Model Overview"),
-                      box(width = 12, h4("Introduction"),p("This is a tool meant to help Community Choice Energy Agencies predict the costs and benefits associated with offering an incentive program to subsidize residents’ purchases of battery electric vehicles (BEVs) or plug-in hybrid electric vehicles (PHEVs). Based on incentive amount, total budget, and a variety of other program and agency specifications, the model predicts the number of vehicle purchases that will be directly caused by an incentive program, then calculates associated greenhouse gas (GHG) emissions reductions and health impacts.")
+            fluidPage(h3("Tool Overview"),
+                      box(width = 12, h4("Introduction"),p("This is a tool meant to help Community Choice Energy agencies predict costs and benefits associated with offering an incentive program to subsidize residents’ purchases of battery electric vehicles (BEVs) and/or plug-in hybrid electric vehicles (PHEVs). Based on incentive amount, total budget, and a variety of other program and agency specifications, the model predicts the number of vehicle purchases that will be directly caused by an incentive program, then calculates associated greenhouse gas (GHG) emission reductions and health impacts.")
                       ),
-                      box(width = 12, h4("Using the Toolkit"),p("To use this model, at a minimum, users will need to enter values into the Primary Inputs section of the Toolkit tab. This section includes: Agency (Region), Total Incentives Budget, Year, Electric Vehicele (BEV) Incentive, Plug-in Hybrid (PHEV) Incentive, and Energy mix, and incentive amounts. There are a variety of additional inputs that allow users to users add further program specifications as appropriate. A detailed breakdown of all available input options is included in the User Guide tab.")
+                      box(width = 12, h4("Using the Tool: Inputs"),p("The tool requires that users enter values in at least the Primary Inputs section of the Inputs page. This section includes: Agency (Region), Total Incentives Budget, Year, BEV Incentive, PHEV Incentive, and Energy mix, and Incentive Amounts. There are a variety of additional inputs that allow users to add further program specifications as desired. A detailed breakdown of all available input options is included in the User Guide page.")
                       ),
-                      box(width = 12, h4("Results"), p("Once the user has filled in the appropriate inputs and run the model, results will be displayed on the right-hand side of the Toolkit tab. The main results show the predicted participation in the incentive program for EV and PHEV incentives. These results show the total number of predicted incentives redeemed, and the predicted number of sales directly caused by the incentive. The model then displays predicted health, greenhouse gas, and monetary impacts associated with the incentive program. ")
+                      box(width = 12, h4("Using the Tool: Results"), p("The tool's primary results are the predicted amount of public uptake of the modeled EV and PHEV incentives, in terms of both total number of incentives redeemed and number of sales directly caused by the incentive. The tool's secondary results are predicted incentive program-caused greenhouse gas, health, and monetary impacts.")
                       ))) , 
     tabItem(tabName = "tab_2",
             fluidPage(h3("User Guide"),
                       box( width = 12, h4("Primary Inputs"),p("These inputs represent the minimum amount of information necessary to run the model. They are:"), 
-                           br(),tags$div(tags$ul(tags$li("Agency (Region): Which CCE Agency will be running the program. The model uses this) information to set the correct population level and predict local emissions impacts."), 
+                           br(),tags$div(tags$ul(tags$li("Agency: Which CCE Agency will be running the program. The model uses this) information to set the correct population level and predict local emissions impacts."), 
                                                  tags$li("Total Incentives Budget: The total available budget for providing EV and PHEV incentives."),
                                                  tags$li("Year: The year that the incentives program will run."),
-                                                 tags$li("Electric Vehicle (BEV) Incentive: The dollar amount that the agency will offer for each electric vehicle purchase."), 
+                                                 tags$li("Battery Electric Vehicle (BEV) Incentive: The dollar amount that the agency will offer for each electric vehicle purchase."), 
                                                  tags$li("Plug-in Hybrid (PHEV) Incentive: The dollar amount that the agency will offer for each plug-in hybrid purchase."), 
                                                  tags$li("Energy mix: These values specify the composition of the energy mix that is used to charge electric vehicles."),  style = "font-size: 13px"))),    box( width = 12, h4("Incentive Details"),p("These allow agencies to add further details to their incentive offerings. These are included with
                                                                                                                                                                                                                                                        general default values that can be altered if necessary to match the agency’s needs."), br(),tags$div(tags$ul(tags$li("Include incentive for High end BEV and luxury PHEV: These are Yes/No inputs set at No by default. If switched to Yes, the model will include Tesla and luxury plug-in hybrid vehicles among those that receive their respective incentives."), 
@@ -48,7 +48,7 @@ ui <-  dashboardPage(
                       ))), 
     tabItem(tabName ="tab_3",
             fluidPage(
-              titlePanel("Insert all inputs first and go to the next tab to get results"),
+              titlePanel("Insert all inputs first and go to the next Results page to get results"),
                fluidRow(  
                  
                  column(3,box(title = "Agency main inputs", width=NULL, status = "success", solidHeader = TRUE, collapsible = TRUE,
