@@ -5,8 +5,8 @@ account: energychoice
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 326988
-bundleId: 1428801
+bundleId: 1435457
 url: https://energychoice.shinyapps.io/EVincentive/
-when: 1528957298.57843
+when: 1529334671.74241
 asMultiple: FALSE
 asStatic: FALSE
